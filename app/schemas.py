@@ -24,20 +24,21 @@ class TagOut(BaseModel):
 class UserBase(BaseModel):
     FirstName: str
     LastName: str
-    MiddleName: Optional[str]
+    MiddleName: Optional[str] = None
     BirthDate: date
     GenderId: int
     Email: EmailStr
     Login: str
-    PasswordHash: str
-    Photo: Optional[bytes]
+    Photo: Optional[bytes] = None
 
 class UserCreate(UserBase):
-    pass
+    # Клиент отправляет обычный пароль, а не хеш
+    Password: str
 
 class UserOut(UserBase):
     UserId: int
     CreatedAt: datetime
+    # PasswordHash не выводим в ответе из соображений безопасности
     model_config = ConfigDict(from_attributes=True)
 
 # статьи
@@ -49,14 +50,14 @@ class ArticleBase(BaseModel):
     StatusId: int
 
 class ArticleCreate(ArticleBase):
-    Image: Optional[bytes]
+    Image: Optional[bytes] = None
     TagIds: Optional[List[int]] = []
 
 class ArticleUpdate(BaseModel):
-    Title: Optional[str]
-    Body: Optional[str]
-    StatusId: Optional[int]
-    Image: Optional[bytes]
+    Title: Optional[str] = None
+    Body: Optional[str] = None
+    StatusId: Optional[int] = None
+    Image: Optional[bytes] = None
     TagIds: Optional[List[int]] = []
 
 class ArticleOut(ArticleBase):

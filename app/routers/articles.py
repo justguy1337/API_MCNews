@@ -21,13 +21,16 @@ router = APIRouter(
     summary="List Published",
     description="Возвращает опубликованные статьи (опционально filter by status)"
 )
+
 def list_published(
-    skip: int = Query(0, ge=0, description="Пропустить N записей"),
-    limit: int = Query(10, ge=1, le=100, description="Максимум записей"),
-    status: Optional[int] = Query(None, description="ID статуса для фильтрации"),
+    skip: int = Query(0, ge=0, description="Skip N records"),
+    limit: int = Query(10, ge=1, le=100, description="Max records"),
+    status: Optional[int] = Query(None, description="Status ID for filtering"),
+    search: Optional[str] = Query(None, description="Search by article title"),
+    tag_id: Optional[int] = Query(None, description="Filter by tag ID"),
     db: Session = Depends(get_db)
 ):
-    return crud.get_articles(db, skip=skip, limit=limit, status_id=status)
+    return crud.get_articles(db, skip=skip, limit=limit, status_id=status, search=search, tag_id=tag_id)
 
 
 @router.get(
